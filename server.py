@@ -1,5 +1,8 @@
 import socket
 import time
+import pickle
+
+
 HEADERSIZE = 10
 
 
@@ -12,15 +15,8 @@ while True:
     clientsocket, address = s.accept()
     print(f"Connection to {address} has been established!")
     
-    msg = "Welcome to the server!"
-    msg = f'{len(msg): <{HEADERSIZE}}' + msg
+    d = {1 : "Hey", 2: "World! ", 3: "Aaryan"}
+    msg = pickle.dumps(d)
 
-    clientsocket.send(bytes(msg, "utf-8"))
-    
-    while True:
-        time.sleep(5)
-        msg = f"The time is! {time.time()}"
-        msg = f"{len(msg) :< {HEADERSIZE}}" + msg
-        clientsocket.send(bytes(msg, "utf-8"))        
-        
-    
+    msg = bytes(f'{len(msg): <{HEADERSIZE}}', "utf-8") + msg
+    clientsocket.send(msg)
